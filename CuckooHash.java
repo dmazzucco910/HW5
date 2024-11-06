@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Davide Mazzucco / 001
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -246,12 +246,45 @@ public class CuckooHash<K, V> {
 
  	public void put(K key, V value) {
 
-		// ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME AT TOP OF FILE.
-		// Also make sure you read this method's prologue above, it should help
-		// you. Especially the two HINTS in the prologue.
+		Bucket<K, V> newB = new Bucket<>(key, value);
+		int max = CAPACITY; //To count cycles
+		int currentPos = hash1(key); //starting has position
 
-		return;
+		for (int iteration = 0; iteration < max; iteration++) {//iterate until capacity
+
+			if (table[currentPos] == null) {//if it's empty insert
+				table[currentPos] = newB;
+				return;
+			}
+
+			//if a bucket with the same key and value exists then it will just return and not insert
+			if (table[currentPos].getBucKey().equals(key) && table[currentPos].getValue().equals(value)) {
+				return;
+			}
+
+			//Kick out exsisting bucket and replace with new one
+			Bucket<K, V> kickedOut = table[currentPos];
+			table[currentPos] = newB;
+
+			//move kicked out bucket
+			newB = kickedOut;
+			//check if the current position is the same as the position calculated by hash1
+			if (currentPos == hash1(newB.getBucKey())) {//if so use hash2 function
+				currentPos = hash2(newB.getBucKey());
+			} else {//if not use hash1
+				currentPos = hash1(newB.getBucKey());
+			}
+		}
+
+		//rehash if cycle is reoccuring
+		rehash();
+		put(newB.getBucKey(), newB.getValue()); //recursevly call method on kicked out element
 	}
+
+
+
+
+
 
 
 	/**

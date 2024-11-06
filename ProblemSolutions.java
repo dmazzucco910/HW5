@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Davide Mazzucco / 001
  *
  *   This java file contains the problem solutions of isSubSet, findKthLargest,
  *   and sort2Arrays methods. You should utilize the Java Collection Framework for
@@ -31,10 +31,22 @@ class ProblemSolutions {
      */
 
     public boolean isSubset(int list1[], int list2[]) {
+        //Hash set to store elements from list1
+        Set<Integer> set = new HashSet<>();
 
-        // ADD YOU CODE HERE -- DON'T FORGET TO ADD YOR NAME AT TOP OF FILE
 
-        return false;
+        for (int num : list1) {
+            set.add(num);
+        }
+
+        //check if all elements in list2 are in list1
+        for (int num : list2) {
+            if (!set.contains(num)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 
@@ -52,10 +64,17 @@ class ProblemSolutions {
      */
 
     public int findKthLargest(int[] array, int k) {
+        //create min heap with priority queue
+        PriorityQueue<Integer> min = new PriorityQueue<>();
 
-        // ADD YOUR CODE HERE
+        for (int num : array) {//add array numbers to queue
+            min.add(num);
+            if (min.size() > k) {//add numbers until we reach the kth element
+                min.poll();
+            }
+        }
 
-        return 0;
+        return min.peek();//return to element in the queue which should be the desired result
     }
 
 
@@ -74,9 +93,27 @@ class ProblemSolutions {
 
     public int[] sort2Arrays(int[] array1, int[] array2) {
 
-        // ADD YOU CODE HERE
+        //create min heap with priority queue
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
 
-        return null;
+        //Add both array elements into queue
+        for (int num : array1) {
+            pq.add(num);
+        }
+        for (int num : array2) {
+            pq.add(num);
+        }
+
+        //create empty array to store the final result
+        int[] result = new int[pq.size()];
+
+        //Use poll to sort all the elements
+        int ind = 0;
+        while (!pq.isEmpty()) {//iterate until queue is empty
+            result[ind++] = pq.poll();//add elements in order
+        }
+
+        return result;
     }
 
 }
